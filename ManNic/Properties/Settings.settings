@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HQ4P.Tools.ManNic.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SettingsFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Locations</Value>
+    </Setting>
+    <Setting Name="SettingsFileKeywordPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">node</Value>
+    </Setting>
+    <Setting Name="SettingsFileKeywordType" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Type</Value>
+    </Setting>
+    <Setting Name="SettingsFileKeywordName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Name</Value>
+    </Setting>
+    <Setting Name="SettingsFileTypeNameFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">folder</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

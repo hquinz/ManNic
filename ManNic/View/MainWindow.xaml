@@ -1,0 +1,260 @@
+﻿<Window x:Class="HQ4P.Tools.ManNic.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:luc="clr-namespace:HQ4P.Tools.ManNic.View.UserControls"
+        xmlns:local="clr-namespace:HQ4P.Tools.ManNic"
+        xmlns:viewModels="clr-namespace:HQ4P.Tools.ManNic.ViewModels"
+        xmlns:appSettings ="clr-namespace:HQ4P.Tools.ManNic.Properties"
+        mc:Ignorable="d"
+        Title="ManNic" 
+        Height="380" Width="660" MaxWidth="670"
+        Background="#FF2E2323" Foreground="#FFC8C8C8">
+    
+    <Window.Resources>
+        <HierarchicalDataTemplate x:Key="CustomerTree">
+            <!-- todo Binding XPath to Settings no idea how to do that...-->
+            <TextBlock Text="{Binding XPath=@Name}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="_New" InputGestureText="Strg + N">
+                            <MenuItem.Icon> <Image Source="../Resources/IconNewFolder.png"/> </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_Rename" InputGestureText="F2">
+                            <MenuItem.Icon> <Image Source="../Resources/IconUmbenennnen.png"/> </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_Delete" InputGestureText="Del" IsEnabled="{Binding Path=VmTreeView.AllowDelete}">
+                            <MenuItem.Icon> <Image Source="../Resources/IconDelete.png"/> </MenuItem.Icon>
+                        </MenuItem>
+
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+            <HierarchicalDataTemplate.ItemsSource>
+                <Binding XPath="node"/>
+                <!-- todo Binding XPath to Settings (first try didn't work cause no depency property of an depency object-->
+                <!--Binding XPath="{Binding Source={x:Static appSettings:Settings.Default}, Path=SettingsFileKeywordPath, Mode=OneTime}"/-->
+            </HierarchicalDataTemplate.ItemsSource>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+
+    
+    <Grid x:Name="GridMain"
+        Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+        <Grid.RowDefinitions >
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="GridNetworkadapters"
+            Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions >
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="LblNic"
+                   Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
+                   Content="Network Adapter"
+                   />
+            <ComboBox x:Name="CmbxNics"
+                      Grid.Row="0" Grid.Column="1"
+                      HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,6,8,0"
+                      ItemsSource="{Binding Path=VmAdapterList.NetworkAdapter}" SelectedIndex="{Binding Path=VmAdapterList.Index}">
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction 
+                            Command="{Binding OnNicChangedCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}, Path=SelectedIndex}"
+                            />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Button x:Name="ButRefreshNicList"
+                    Grid.Row="0" Grid.Column="2" 
+                    HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,8,8,0"
+                    Content=" Refresh "
+                    Command="{Binding VmAdapterList.Refresh}"
+                    />
+        </Grid>
+        <Grid x:Name="GridNicConfiguration"
+            Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions >
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="ChkbNicIpEnable"
+                Grid.Row="0" Grid.Column="0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" Margin= "4,4,4,4"
+                IsChecked="{Binding VmNicData.IpEnabled}">
+                Nic Activated
+            </CheckBox>
+            <CheckBox x:Name="ChkbNicDhcpEnable"
+                Grid.Row="0" Grid.Column="1"                
+                HorizontalAlignment="Left" VerticalAlignment="Center" Margin= "4,4,4,4"
+                IsEnabled="{Binding VmNicData.IpEnabled}"
+                IsChecked="{Binding VmNicData.DhcpEnabled}">
+                DHCP Enabled
+            </CheckBox>
+            <Label x:Name="LbLNicMacAdress"
+                   Grid.Row="0" Grid.Column="2"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin= "4,4,4,4"
+                   Content="MAC Address"
+                   />
+            <TextBox x:Name="TxtBxNicMacAdress"
+                     Grid.Row="0" Grid.Column="3"
+                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin= "4,4,4,4" 
+                     Text="{Binding VmNicData.MacAddress, Mode=OneWay}"
+                     IsEnabled="False"
+                     />
+            <Label x:Name="LblIpV4Address" 
+                   Grid.Row="1" Grid.Column="0"
+                   Content="IPv4 Address"
+                   />
+            <luc:IpTextBox x:Name="IpTxtBxIpv4Address"
+                           Grid.Row="1" Grid.Column="1"
+                           IsEnabled="{Binding VmNicData.EnableIpSetting}"
+                           Mode="IPv4Address"
+                           Value="{Binding VmNicData.IpV4Address}"
+                           DataValid="{Binding VmNicData.IpV4AddressDataOk, Mode=OneWayToSource}"
+                           />
+            <Label x:Name="LblIpV6Address" 
+                   Grid.Row="1" Grid.Column="2"
+                   Content="IPv6 Address"
+                   />
+            <luc:IpTextBox x:Name="IpTxtBxIpv6Address"
+                           Grid.Row="1" Grid.Column="3"
+                           IsEnabled="False"
+                           Mode="IPv6Address"
+                           Value="{Binding VmNicData.IpV6Address}"
+                           DataValid="{Binding VmNicData.IpV6AddressDataOk, Mode=OneWayToSource}"
+                           />
+            <Label x:Name="LblIpV4Subnetmask" 
+                   Grid.Row="2" Grid.Column="0"
+                   Content="IPv4 Subnetmask"
+                   />
+            <luc:IpTextBox x:Name="IpTxtBxIpv4Subnetmask"
+                           Grid.Row="2" Grid.Column="1"
+                           IsEnabled="{Binding VmNicData.EnableIpSetting}"
+                           Mode="IPv4SubnetMask"
+                           Value="{Binding VmNicData.IpV4SubnetMask}"
+                           DataValid="{Binding VmNicData.IpV4SubnetDataOk, Mode=OneWayToSource}"
+
+                           />
+            <Label x:Name="LblIpV46Prefix" 
+                   Grid.Row="2" Grid.Column="2"
+                   Content="IPv6 Prefix"
+                   />
+            <luc:IpTextBox x:Name="IpTxtBxIpv6Prefix"
+                           Grid.Row="2" Grid.Column="3"
+                           IsEnabled="False"
+                           Mode="IPv6Prefix"
+                           Value="{Binding VmNicData.IpV6Prefix}"
+                           DataValid="{Binding VmNicData.IpV6PrefixDataOk, Mode=OneWayToSource}"
+                           />
+            <Label x:Name="LblIpDefaultGateway" 
+                   Grid.Row="3" Grid.Column="0"
+                   Content="Default Gateway"
+            />
+            <luc:IpTextBox x:Name="IpTxtBxDefaultGateway"
+                           Grid.Row="3" Grid.Column="1"
+                           IsEnabled="{Binding VmNicData.EnableIpSetting}"
+                           Mode="IPv4Address"
+                           Value="{Binding VmNicData.DefaultGateway, Mode=TwoWay}"
+                           DataValid="{Binding VmNicData.IpV4GatewayDataOk, Mode=OneWayToSource}"
+            />
+            <StackPanel x:Name="PanelNicConfigCommands"
+                        Grid.Row="3" Grid.Column="3"
+                        Orientation="Horizontal"
+                >
+                <Button x:Name="ButtonNicDataReload"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Padding="4,4,4,4"
+                        Margin="0,0,4,0"
+                        Content="Reload"
+                        Command="{Binding VmNicData.ReloadNicParameter}"
+                />
+                <Button x:Name="ButtonSetNicParameter"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Padding="4,4,4,4"
+                        Margin="0,0,4,0"
+                        Content="Reconfig Adapter"
+                        IsEnabled="{Binding VmNicData.NicDataOk, Mode=OneWay}"
+                        Command="{Binding VmNicData.SetNicParameter}"
+                
+                />
+            </StackPanel>
+        </Grid>
+        <Border x:Name="BorderStatusbar"
+                Grid.Row="2" Grid.Column="0"
+                Height="Auto"
+                BorderBrush="LightGray" BorderThickness="3"
+                Background="DarkGray"
+                >
+            <TextBlock x:Name="TxtBlockStatus"
+                       Foreground="Black"
+                       Text="{Binding ActState}"
+                       />
+
+        </Border>
+
+        <Border x:Name="BorderCusomerData"
+                Grid.Row="3" Grid.Column="0"
+                BorderBrush="LightGray" BorderThickness="3"
+                >
+
+            <Grid x:Name="GridCustomers">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid x:Name="GridCustomerList" DataContext="{Binding Path=VmTreeView.TreeData}">
+
+                    <luc:ExtendedTreeView x:Name="TreeViewCustomers"
+                              Grid.Column="0"
+                              Width="Auto" Height="Auto"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              ItemsSource="{Binding}" ItemTemplate="{StaticResource CustomerTree}"
+                              SelectedItemBindable="{Binding VmTreeView.SelectedValue, Mode=TwoWay }"
+                              >
+                        
+
+                    </luc:ExtendedTreeView>
+                </Grid>
+                <GridSplitter x:Name="GridSplitterCustomerData"
+                              Grid.Column="1" 
+                              Width="5"
+                              HorizontalAlignment="Stretch "
+                              />
+                <TextBlock 
+                    Grid.Column="2" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    TextWrapping="Wrap"
+                    FontSize="30">
+                    Right Side
+                </TextBlock>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>
+

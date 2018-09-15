@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="HQ4P.Tools.ManNic.View.UserControls.IpTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="300"
+             >
+
+    <UserControl.Resources>
+        <Style x:Key="BackgroundPanel"  TargetType="Panel">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Value= "{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Property="Background" />
+
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Value= "{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" Property="Background" />
+
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BackgroundControll"  TargetType="Control">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Value= "{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Property="Background" />
+
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Value= "{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" Property="Background" />
+
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Border x:Name="Border">
+        <StackPanel x:Name="IpTextBoxContainer"
+                    Style="{StaticResource BackgroundPanel}"
+                    Orientation="Horizontal"
+                    >
+        </StackPanel>
+    </Border>
+</UserControl>
