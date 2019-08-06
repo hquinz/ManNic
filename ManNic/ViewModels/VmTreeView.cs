@@ -12,21 +12,23 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using HQ4P.Tools.ManNic.FileMgmt;
+using HQ4P.Tools.ManNic.FileManagement;
 
 
 namespace HQ4P.Tools.ManNic.ViewModels
 {
     public class VmTreeView : INotifyPropertyChanged
     {
-        public XmlDataProvider TreeData { get; set; }
 
         private readonly string _myRoot = AppDomain.CurrentDomain.BaseDirectory;
-        private XmlFileHandler fileHandler;
+        private readonly XmlFileHandler _fileHandler;
 
         private readonly Action<string> _setState;
 
         #region properties
+
+        public XmlDataProvider TreeData => _fileHandler.XmlData;
+
         private bool _allowDelete = false;
         private object _selctedValue;
 
@@ -66,17 +68,11 @@ namespace HQ4P.Tools.ManNic.ViewModels
         public VmTreeView(Action<string> setState)
         {
             _setState = setState;
+            _fileHandler = FileHandlerConstruction();
 
-            fileHandler = FileHandlerConstruction(_myRoot, Properties.Settings.Default.SettingsFileName);
-
-            TreeData = new XmlDataProvider
-            {
-                Source = fileHandler.FileUri,
-                XPath = Properties.Settings.Default.SettingsFileKeywordPath
-            };
         }
 
-        private XmlFileHandler FileHandlerConstruction(string path, string name)
+        private XmlFileHandler FileHandlerConstruction()
         {
             var rootNode = new XmlEntryStandard()
             {
@@ -84,8 +80,12 @@ namespace HQ4P.Tools.ManNic.ViewModels
                 TypePrefix = Properties.Settings.Default.SettingsFileKeywordType, TypeName = Properties.Settings.Default.SettingsFileTypeNameFolder,
                 NamePrefix = Properties.Settings.Default.SettingsFileKeywordName, Name = @"Locations"
             };
-            var handler= new XmlFileHandler(_myRoot, name);
-            _setState(handler.GenerateIfNotExists(rootNode) ? @"Locations File found" : handler.Info);
+            var handler= new XmlFileHandler(_myRoot
+                                           , Properties.Settings.Default.SettingsFileName
+                                           , Properties.Settings.Default.SettingsFileKeywordPath);
+            handler.InitXmlFile(rootNode);
+
+            _setState(handler.FileExists ? @"Locations File found" : handler.Info);
             return handler;
 
         }

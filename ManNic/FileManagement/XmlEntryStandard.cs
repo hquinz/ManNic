@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HQ4P.Tools.ManNic.FileMgmt
+namespace HQ4P.Tools.ManNic.FileManagement
 {
     internal class XmlEntryStandard
     {

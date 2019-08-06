@@ -85,8 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FileMgmt\XmlEntryStandard.cs" />
-    <Compile Include="FileMgmt\XmlFileHandler.cs" />
+    <Compile Include="FileManagement\XmlEntryStandard.cs" />
+    <Compile Include="FileManagement\FileHandler.cs" />
+    <Compile Include="FileManagement\XmlFileHandler.cs" />
+    <Compile Include="FileManagement\XmlFunctions.cs" />
     <Compile Include="NicManagement\IpAddressTools.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
