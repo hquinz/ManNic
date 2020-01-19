@@ -3,8 +3,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using HQ4P.Tools.ManNic.NicManagement;
+using HQ4P.Tools.ManNic.View.Tools;
 
-namespace HQ4P.Tools.ManNic.ViewModels
+namespace HQ4P.Tools.ManNic.View.Models
 {
     internal class VmMainMaster : INotifyPropertyChanged
     {
@@ -39,6 +40,12 @@ namespace HQ4P.Tools.ManNic.ViewModels
 
         }
 
+
+        //todo delete
+        private void NewItemSelected(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var selectedValue = e.NewValue;
+        }
 
         private void SetState(string state)
         {

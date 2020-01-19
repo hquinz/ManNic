@@ -6,7 +6,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:luc="clr-namespace:HQ4P.Tools.ManNic.View.UserControls"
         xmlns:local="clr-namespace:HQ4P.Tools.ManNic"
-        xmlns:viewModels="clr-namespace:HQ4P.Tools.ManNic.ViewModels"
+        xmlns:viewModels="clr-namespace:HQ4P.Tools.ManNic.View.Models"
+        xmlns:viewTools="clr-namespace:HQ4P.Tools.ManNic.View.Tools"
         xmlns:appSettings ="clr-namespace:HQ4P.Tools.ManNic.Properties"
         mc:Ignorable="d"
         Title="ManNic" 
@@ -14,30 +15,42 @@
         Background="#FF2E2323" Foreground="#FFC8C8C8">
     
     <Window.Resources>
-        <HierarchicalDataTemplate x:Key="CustomerTree">
+        <HierarchicalDataTemplate x:Key="CustomerTreeDataTemplate">
             <!-- todo Binding XPath to Settings no idea how to do that...-->
-            <TextBlock Text="{Binding XPath=@Name}">
-                <TextBlock.ContextMenu>
+            <TextBox Text="{Binding XPath=@Name}"
+                     IsReadOnly="True">
+                <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="_New" InputGestureText="Strg + N">
-                            <MenuItem.Icon> <Image Source="../Resources/IconNewFolder.png"/> </MenuItem.Icon>
+                        <MenuItem Header="New _Folder" InputGestureText="Strg + F">
+                            <MenuItem.Icon> <Image Source="../Resources/AddFolder_16x.png"/> </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="New _Entry" InputGestureText="Strg + E">
+                            <MenuItem.Icon>
+                                <Image Source="../Resources/AddItem_16x.png"/>
+                            </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Rename" InputGestureText="F2">
-                            <MenuItem.Icon> <Image Source="../Resources/IconUmbenennnen.png"/> </MenuItem.Icon>
+                            <MenuItem.Icon> <Image Source="../Resources/Rename_16x.png"/> </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Delete" InputGestureText="Del" IsEnabled="{Binding Path=VmTreeView.AllowDelete}">
-                            <MenuItem.Icon> <Image Source="../Resources/IconDelete.png"/> </MenuItem.Icon>
+                            <MenuItem.Icon> <Image Source="../Resources/DeleteListItem_16x.png"/> </MenuItem.Icon>
                         </MenuItem>
 
                     </ContextMenu>
-                </TextBlock.ContextMenu>
-            </TextBlock>
+                </TextBox.ContextMenu>
+
+            </TextBox>
             <HierarchicalDataTemplate.ItemsSource>
                 <Binding XPath="node"/>
                 <!-- todo Binding XPath to Settings (first try didn't work cause no depency property of an depency object-->
                 <!--Binding XPath="{Binding Source={x:Static appSettings:Settings.Default}, Path=SettingsFileKeywordPath, Mode=OneTime}"/-->
             </HierarchicalDataTemplate.ItemsSource>
+
+
         </HierarchicalDataTemplate>
+
+
+  
     </Window.Resources>
 
     
@@ -213,7 +226,7 @@
 
         </Border>
 
-        <Border x:Name="BorderCusomerData"
+        <Border x:Name="BorderCustomerData"
                 Grid.Row="3" Grid.Column="0"
                 BorderBrush="LightGray" BorderThickness="3"
                 >
@@ -224,20 +237,46 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
-                <Grid x:Name="GridCustomerList" DataContext="{Binding Path=VmTreeView.TreeData}">
 
-                    <luc:ExtendedTreeView x:Name="TreeViewCustomers"
+                <Grid x:Name="GridCustomerList">
+
+                    <TreeView x:Name="TreeViewCustomers"
+                              
                               Grid.Column="0"
                               Width="Auto" Height="Auto"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              ItemsSource="{Binding}" ItemTemplate="{StaticResource CustomerTree}"
-                              SelectedItemBindable="{Binding VmTreeView.SelectedValue, Mode=TwoWay }"
+                              DataContext="{Binding Path=VmTreeView.TreeData}"
+                              ItemsSource="{Binding}" ItemTemplate="{StaticResource CustomerTreeDataTemplate}"
                               >
+                        <TreeView.Resources>
+                            <viewTools:KeyEventConverter x:Key="KeyDownConverter" />
+                        </TreeView.Resources>
+                       
+                        <i:Interaction.Triggers>
+
+                            <i:EventTrigger EventName="SelectedItemChanged">
+                                <i:InvokeCommandAction
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VmTreeView.SelectedItemChangedCommand}"
+                                    CommandParameter="{Binding ElementName=TreeViewCustomers}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="KeyDown">
+                                <viewTools:InvokeDelegateCommandAction  Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.VmTreeView.KeyDownCommand}">
+                                    <viewTools:InvokeDelegateCommandAction.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource KeyDownConverter}">
+                                            <Binding ElementName="TreeViewCustomers"/>
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="InvokeParameter"/>
+                                        </MultiBinding>
+                                    </viewTools:InvokeDelegateCommandAction.CommandParameter>
+                                </viewTools:InvokeDelegateCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+
+                    </TreeView>
+
+                </Grid>
                         
 
-                    </luc:ExtendedTreeView>
-                </Grid>
                 <GridSplitter x:Name="GridSplitterCustomerData"
                               Grid.Column="1" 
                               Width="5"

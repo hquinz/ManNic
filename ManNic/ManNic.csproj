@@ -97,11 +97,16 @@
     </Compile>
     <Compile Include="SettingMgmt\EnumEntryType.cs" />
     <Compile Include="SettingMgmt\API\SettingsEntry.cs" />
-    <Compile Include="ViewModels\VmTreeView.cs" />
-    <Compile Include="View\UserControls\ExtendedTreeView.cs" />
-    <Compile Include="View\UserControls\IpTextBox.xaml.cs">
+    <Compile Include="View\Models\VmTreeViewController.cs" />
+    <Compile Include="View\Models\VmTreeViewData.cs" />
+    <Compile Include="View\Models\VmTreeView.cs" />
+    <Compile Include="View\Controls\ExtendedTreeView.cs" />
+    <Compile Include="View\Controls\IpTextBox.xaml.cs">
       <DependentUpon>IpTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Tools\InvokeDelegateCommandAction.cs" />
+    <Compile Include="View\Tools\KeyEventConverter.cs" />
+    <Compile Include="View\Tools\TreeViewCondition.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,15 +121,15 @@
     <Compile Include="NicManagement\NetworkSettings.cs" />
     <Compile Include="NicManagement\NicCollector.cs" />
     <Compile Include="NicManagement\NicConfigurator.cs" />
-    <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\VmMainMaster.cs" />
-    <Compile Include="ViewModels\VmNetworkAdapterList.cs" />
-    <Compile Include="ViewModels\VmNicData.cs" />
+    <Compile Include="View\Tools\RelayCommand.cs" />
+    <Compile Include="View\Models\VmMainMaster.cs" />
+    <Compile Include="View\Models\VmNetworkAdapterList.cs" />
+    <Compile Include="View\Models\VmNicData.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\UserControls\IpTextBox.xaml">
+    <Page Include="View\Controls\IpTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,6 +155,7 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -170,13 +176,40 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\IconDelete.png" />
+    <Resource Include="Resources\DeleteListItem_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\IconUmbenennnen.png" />
+    <Resource Include="Resources\Key_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\IconNewFolder.png" />
+    <Resource Include="Resources\NewKey_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\NewTopFrame_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Rename_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddFolder_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddItem_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddTextFile_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AddTopFrame_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Folder_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Item_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\TextFile_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

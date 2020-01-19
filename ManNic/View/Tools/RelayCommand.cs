@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace HQ4P.Tools.ManNic.ViewModels
+namespace HQ4P.Tools.ManNic.View.Tools
 {
     public class RelayCommand<T> : ICommand
     {

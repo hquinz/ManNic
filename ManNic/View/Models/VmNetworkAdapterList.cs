@@ -4,8 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using HQ4P.Tools.ManNic.NicManagement;
+using HQ4P.Tools.ManNic.View.Tools;
 
-namespace HQ4P.Tools.ManNic.ViewModels
+namespace HQ4P.Tools.ManNic.View.Models
 {
     internal class VmNetworkAdapterList : INotifyPropertyChanged
     {
